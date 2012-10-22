@@ -4,6 +4,12 @@
 
 
 /*HASH ABIERTO POR QUE ES MAS FACIL*/
+struct nodo_hash{
+    char *clave;
+    void *valor;
+    struct nodo* ref;
+};
+
 struct hash
 {
     size_t cantidad;
@@ -14,17 +20,12 @@ struct hash
     /*hash_nodo_t **tabla;*/   //CERRADO
 
 /*}lista_t **tabla //ABIERTO*/
-}hash_t;
+};
 
-struct nodo_hash{
-    char *clave;
-    void *valor;
-    struct nodo* ref;
-}nodo_hash_t;
 
-hash_t hash_crear(void)
+hash_t hash_crear(hash_destruir_dato_t destruir_dato)
 {
-    hash_t hash = malloc(sizeof(hash_t);
+    hash_t hash = hash_t malloc(sizeof(hash_t));
     hash->tabla = calloc(TAM_INI, sizeof(nodo_hash_t*));
 }
 
