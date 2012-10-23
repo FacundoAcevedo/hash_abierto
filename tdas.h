@@ -1,7 +1,4 @@
 #ifndef TDAS_H
-#define TDAS_H
-
-#include <stdbool.h>
 
 /* *****************************************************************
  *                DEFINICION DE LOS TIPOS DE DATOS
@@ -12,6 +9,7 @@ typedef struct nodo nodo_t;
 typedef struct lista lista_t;
 typedef struct lista_iter lista_iter_t;
 typedef struct cola cola_t;
+typedef struct vector vector_t;
 
 
 
@@ -29,14 +27,14 @@ pila_t* pila_crear();
 void pila_destruir(pila_t *pila , void destruir_dato(void *));
 
 
-// Devuelve verdadero o falso, segÃÂÃÂºn si la pila tiene o no elementos apilados.
+// Devuelve verdadero o falso, seg????????n si la pila tiene o no elementos apilados.
 // Pre: la pila fue creada.
 bool pila_esta_vacia(const pila_t *pila);
 
 
 // Agrega un nuevo elemento a la pila. Devuelve falso en caso de error.
 // Pre: la pila fue creada.
-// Post: se agregÃÂÃÂ³ un nuevo elemento a la pila, valor es el nuevo tope.
+// Post: se agreg???????? un nuevo elemento a la pila, valor es el nuevo tope.
 bool pila_apilar(pila_t *pila, void* valor );
 
 
@@ -164,8 +162,8 @@ void *lista_borrar_primero(lista_t *lista);
 // avanzan su posicion en uno.
 bool lista_insertar(lista_t *lista, lista_iter_t *iter, void *dato);
         
-	
-// Elimina el dato en la lista ubicado en la posicion que se pasa por parametro.	
+    
+// Elimina el dato en la lista ubicado en la posicion que se pasa por parametro.    
 // Pre: la lista no es vacia.
 // Post: se elimina de la lista el elemento senalado por el iterador.
 void *lista_borrar(lista_t *lista, lista_iter_t *iter);
@@ -201,6 +199,44 @@ bool lista_iter_al_final(const lista_iter_t *iter);
 // Pre: el iterador fue creado.
 // Post: se elimina el iterador.
 void lista_iter_destruir(lista_iter_t *iter);
+
+
+/* *****************************************************************
+ *                    PRIMITIVAS DEL VECTOR 
+ * *****************************************************************/
+
+// Crea un vector de tamaño tam
+// Post: vector es una vector vacío de tamaño tam
+vector_t* vector_crear(size_t tam);
+
+// Destruye el vector
+// Pre: el vector fue creado
+// Post: se eliminaron todos los elementos del vector
+void vector_destruir(vector_t *vector);
+
+// Cambia el tamaño del vector
+// Pre: el vector fue creado
+// Post: el vector cambió de tamaño a nuevo_tam y devuelve true
+// o el vector queda intacto y devuelve false si no se pudo cambiar el tamaño
+// a nuevo_tam
+bool vector_redimensionar(vector_t *vector, size_t nuevo_tam);
+
+// Almacena en valor el dato guardado en la posición pos del vector
+// Pre: el vector fue creado
+// Post: se almacenó en valor el dato en la posición pos. Devuelve false si la
+// posición es inválida (fuera del rango del vector, que va de 0 a tamaño-1)
+bool vector_obtener(vector_t *vector, size_t pos, int *valor);
+
+// Almacena el valor en la posición pos
+// Pre: el vector fue creado
+// Post: se almacenó el valor en la posición pos. Devuelve false si la posición
+// es inválida (fuera del rango del vector, que va de 0 a tamaño-1) y true si
+// se guardó el valor con éxito.
+bool vector_guardar(vector_t *vector, size_t pos, int valor);
+
+// Devuelve el tamaño del vector
+// Pre: el vector fue creado
+size_t vector_obtener_tamanio(vector_t *vector);
 
 
 #endif // TDAS_H
