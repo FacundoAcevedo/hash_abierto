@@ -5,7 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-#include <tdas.h>
+#include "tdas.h"
 
 
 #define TAM_INI 10
@@ -16,8 +16,9 @@ typedef struct hash hash_t;
 typedef struct hash_iter hash_iter_t;
 typedef void (*hash_destruir_dato_t)(void *);
 
-
 typedef struct nodo_hash nodo_hash_t;
+
+
 /*
  *PRIMITIVAS
  */

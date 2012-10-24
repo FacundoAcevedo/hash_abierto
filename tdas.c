@@ -25,7 +25,7 @@ struct lista_iter{
 struct vector
 {
     size_t tam;
-    int *datos;
+    int* datos;
 };
 
 
