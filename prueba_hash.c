@@ -416,14 +416,14 @@ int main(int argc, char** argv)
 	if (argc < 2) {
 	    /* Ejecuta todas las pruebas unitarias. */
     	prueba_crear_hash_vacio();
-	    prueba_iterar_hash_vacio();
+		/*prueba_iterar_hash_vacio();*/
 		prueba_hash_insertar();
 		prueba_hash_reemplazar();
 		prueba_hash_reemplazar_con_destruir();
 		prueba_hash_borrar();
 		prueba_hash_volumen(5000, true);
-		prueba_hash_iterar();
-		prueba_hash_iterar_volumen(5000);
+		/*prueba_hash_iterar();*/
+		/*prueba_hash_iterar_volumen(5000);*/
 	} else {
 	    size_t largo = atoi(argv[1]);
     	prueba_hash_volumen(largo, false);
