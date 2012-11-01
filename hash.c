@@ -60,14 +60,6 @@ hash_t* hash_crear(hash_destruir_dato_t destruir_dato)
 
 bool hash_guardar(hash_t *hash, const char *clave, void *dato)
 {
-    /*
-     *XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-     *Falta:
-     *    Ver cuando redimensionar
-     *    ...
-     *XXXXXXXXXXXXXXXXXXXXXXXXXXX
-     */
-
 
 
     if (!hash) return NULL;//compurebo la existencia del hash
@@ -156,12 +148,10 @@ void *hash_obtener(const hash_t *hash, const char *clave)
    size_t vect_pos = _fhash(clave, hash->tamanio);
    
    //Voy a dicha posicion y recorro los nodos
-   /*if (!((hash->tabla) + vect_pos)) return false;*/
    if (!hash->tabla[vect_pos]) return NULL;
 
    //Creo lo que nececito
    nodo_hash_t* nodo_actual = NULL;
-   /*lista_t* lista = *((hash->tabla) + vect_pos);*/
    lista_t* lista = hash->tabla[vect_pos];
    lista_iter_t* iter = lista_iter_crear(lista);
    
@@ -172,8 +162,11 @@ void *hash_obtener(const hash_t *hash, const char *clave)
    {
       nodo_actual = lista_iter_ver_actual(iter);
       //Verifico si esta
-      if ( strcmp( nodo_actual->clave, clave) == 0){
-          dato = lista_iter_ver_actual(iter);
+      if ( !strcmp( nodo_actual->clave, clave)){//Recordad q si son == da 0
+          dato = ((nodo_hash_t*) lista_iter_ver_actual(iter))->valor;
+          dato = nodo_actual->valor;
+          //BORRAR
+          printf("DATO_OBTENER: CLAVE: %s, DATO: %s\n",clave,(char*) dato);
           lista_iter_destruir(iter);
           return dato; 
       }//if
@@ -214,20 +207,36 @@ void *hash_borrar(hash_t *hash, const char *clave)
       nodo_actual = lista_iter_ver_actual(iter);
       //Verifico si esta
       if ( strcmp( nodo_actual->clave, clave) == 0){
+          //Destruyo el iterador
           lista_iter_destruir(iter);
-          return lista_borrar(lista, iter);
+          //Disminuyo la cantidad
+          hash->cantidad--;
+          return ((nodo_hash_t*) lista_borrar(lista, iter))->valor;
       }//if
 
       //No esta, entonces avanzo una pocicion
       lista_iter_avanzar(iter);
 
    }while(lista_iter_ver_actual(iter));
+   //Destruyo el iterador
    lista_iter_destruir(iter);
 
    //No la encontre, pucha!
    return false;
 }//hash_borrar
 
+void hash_destruir(hash_t *hash)
+{
+    //Recorro toda la tabla, destruyendo!
+    for (long int i =0; i < hash->tamanio; i++)
+        if (hash->tabla[i]) lista_destruir(hash->tabla[i], hash->destruir_dato);
+
+    free(hash->tabla);
+    free(hash);
+
+
+
+}//hash_destruir
 
 hash_iter_t *hash_iter_crear(const hash_t *hash)
 {
@@ -274,9 +283,25 @@ bool hash_iter_avanzar(hash_iter_t *iter)
     return true;
 }//hash_iter_avanzar
 
-const char *hash_iter_ver_actual(const hash_iter_t *iter);
-bool hash_iter_al_final(const hash_iter_t *iter);
-void hash_iter_destruir(hash_iter_t* iter);
+const char *hash_iter_ver_actual(const hash_iter_t *iter)
+{
+    if (iter->hash->cantidad == 0) return NULL;
+    return ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave;
+
+}//hash_iter_ver_actual
+
+bool hash_iter_al_final(const hash_iter_t *iter)
+{
+    if (lista_iter_al_final(iter->iter_lista) && \
+        iter->hash->cantidad == iter->pos_vect) return true;
+    return false;
+
+}//hash_iter_al_final
+void hash_iter_destruir(hash_iter_t* iter)
+{
+    lista_iter_destruir(iter->iter_lista);
+    free(iter);
+}//hash_iter_destruir
 
 
 /*--------------PRIVADAS---------------*/
@@ -352,16 +377,10 @@ bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo)
     // Ahora sabiendo que hay nodos, comienzo a travasar
     while ( indice < hash_viejo->cantidad)
     {
-        //Obtengo el iterador de las listas
-        iter_lista = iter_hash_viejo->iter_lista;
-        nodo_lista = iter_lista->actual;
-        nodo_hash = nodo_lista->valor;
         //Obtengo la clave
-        //clave = iter_hash_viejo->iter_lista->actual->valor->clave;
-        clave = nodo_hash->clave;
+        clave = hash_iter_ver_actual(iter_hash_viejo);
         //Obtengo el dato
-        //dato  = iter_hash_viejo->iter_lista->actual->valor->valor;
-        dato  = nodo_hash->valor;
+        dato  = hash_obtener(hash_viejo, clave);
         //Lo guardo en mi nuevo hash
         hash_guardar(hash_nuevo, clave, dato);
         //Avanzo el iterador
@@ -372,6 +391,7 @@ bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo)
 
     //Comprobacion del final
     if (hash_viejo->cantidad != hash_nuevo->cantidad) return false;
+    puts("TRASVASADO OK");
     //Viendo que esta todo mas que en orden, procedo a liberar al hash viejo y su 
     //iterador y a retornar true
     free(hash_viejo);
