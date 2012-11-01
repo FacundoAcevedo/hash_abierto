@@ -232,7 +232,7 @@ void *hash_borrar(hash_t *hash, const char *clave)
 hash_iter_t *hash_iter_crear(const hash_t *hash)
 {
     if (!hash) return NULL;
-    hash_iter_t *iter;
+    hash_iter_t *iter = malloc(sizeof(hash_iter_t));
     iter->hash = hash;
     /*iter->anterior = NULL;*/
     if (hash->cantidad ==0){
@@ -298,7 +298,7 @@ long int _buscar_lista(const hash_t* hash,long int inicio)
     {
         if (hash->tabla[i]) return i;
     }
-    return -1;
+    return -1; //Devuelvo -1 por que si es 0 se confunde con null
 }//_buscar_primer_lista
 
 //Funcion _factor_de_carga
