@@ -425,7 +425,7 @@ int main(int argc, char** argv)
         puts("######## PUREBA HASH BORRAR!!!#########");
         prueba_hash_borrar();
         puts("#####PUREBA DE VOLUMEN!!!########");
-        /*prueba_hash_volumen(5000, true);*/
+        prueba_hash_volumen(5000, true);
         
         /*prueba_hash_iterar();*/
         /*prueba_hash_iterar_volumen(5000);*/
