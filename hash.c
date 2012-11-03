@@ -236,7 +236,8 @@ void *hash_borrar(hash_t *hash, const char *clave)
 void hash_destruir(hash_t *hash)
 {
     //Recorro toda la tabla, destruyendo!
-    for (long int i =0; i < hash->tamanio; i++)
+    long int i =0;
+    for ( i =0; i < hash->tamanio; i++)
         if (hash->tabla[i]) lista_destruir(hash->tabla[i], hash->destruir_dato);
 
     free(hash);
@@ -326,7 +327,8 @@ nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato){
 //Funcion _buscar_primer_nodo
 long int _buscar_lista(const hash_t* hash,long int inicio)
 {
-    for (long int i=inicio; i<hash->tamanio; i++)
+    long int i;
+    for (i=inicio; i<hash->tamanio; i++)
     {
         if (hash->tabla[i]) return i;
     }
@@ -366,6 +368,14 @@ bool _hash_redimensionar(hash_t *hash)
 //Funcion _hash_trasvasar
 bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo)
 {
+    /*
+     *Que hace eso?, bue primero recibe dos hash, uno viejo , y uno nuevo, con el 
+     *tamanio nuevo, traspaso todos los nodos del hash viejo al hash nuevo
+     *ahora van a tener una nueva ubicacion, por que teine un nuevo tama?o,
+     *entonces copio la porcion de memoria del hash nuevo al hash viejo y mato al
+     *hash nuevo.
+     */
+
     if (!hash_viejo || !hash_nuevo) return false;
     //Verificado el asunto, me dispongo a hacer la magia
     //Creo un iterador sobre el viejo hash
@@ -395,10 +405,10 @@ bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo)
 
     //Comprobacion del final
     if (hash_viejo->cantidad != hash_nuevo->cantidad) return false;
-    puts("TRASVASADO OK");
     //Viendo que esta todo mas que en orden, procedo a copiar la memoria
     // adios iterador a retornar true
     memcpy(hash_viejo,hash_nuevo,sizeof(hash_nuevo));
+    /*hago FREE, por que si uso hash_destruir mato a los nodos*/
     free(hash_nuevo);
     hash_iter_destruir(iter_hash_viejo);
     return true;
@@ -442,7 +452,8 @@ bool _hash_reemplazar(hash_t* hash, const char* clave, void* dato)
 size_t _fhash(const char* clave, size_t tam)
 {
     size_t hash=0;
-    for (int i=0; i<strlen(clave); i++)
+    int i = 0;
+    for (i=0; i<strlen(clave); i++)
     {
         /*hash += (size_t) atoi(&clave[i]);*/
         hash += (size_t) clave[i]*2+12;
