@@ -221,10 +221,12 @@ void prueba_hash_valor_null()
 
 void prueba_hash_volumen(size_t largo, bool debug) 
 {
+    printf("LARGO: %ui\n", largo);
+
 	hash_t* hash = hash_crear(NULL);
 
 	const size_t largo_clave = 10;
-	char (*claves)[largo_clave] = malloc(largo * largo_clave);
+    char (*claves)[largo_clave] = malloc(largo * largo_clave);
 
 	int* valores[largo];
 
