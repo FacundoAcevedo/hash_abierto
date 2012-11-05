@@ -134,16 +134,15 @@ void *lista_borrar_primero(lista_t *lista){
 
 
 bool lista_insertar(lista_t *lista, lista_iter_t *iter, void *dato){
-	if (iter->anterior == NULL && iter->actual != NULL){ // o sea si iter = posicion inicial
+	/*if (!iter->anterior  && iter->actual){ // o sea si iter = posicion inicial*/
+	if (!iter->anterior ){ // o sea si iter = posicion inicial
         //Estoy en el primer nodo
         lista_insertar_primero(lista, dato);
         //Actualizo el iterador
         iter->actual = lista->inicio;
         iter->anterior = NULL;
-        lista->largo +=1;
         return true;
-        }
-        //if
+        }//if
     nodo_t* nodo_nuevo = nodo_crear(dato); 
     if (nodo_nuevo == NULL) return false;
     (iter->anterior)->ref = nodo_nuevo;
@@ -189,7 +188,7 @@ void *lista_borrar(lista_t *lista, lista_iter_t *iter)
 
 lista_iter_t *lista_iter_crear(const lista_t *lista)
 {
-    if (lista_esta_vacia(lista)) return NULL;
+    /*if (lista_esta_vacia(lista)) return NULL;*/
     lista_iter_t* iter = malloc(sizeof(lista_iter_t));
     iter->anterior = NULL;
     iter->actual = lista->inicio;
@@ -198,10 +197,9 @@ lista_iter_t *lista_iter_crear(const lista_t *lista)
 
 
 bool lista_iter_avanzar(lista_iter_t *iter){
-	if (!(iter->actual))// si la lista esta vacia
-		return false;
-	if (!((iter->actual)->ref))
-		return false;
+	if (!(iter->actual)) return false;
+	/*if (!((iter->actual)->ref))*/
+		/*return false;*/
 	iter->anterior = iter->actual;
 	iter->actual = (iter->actual)->ref;
 	return true;
@@ -209,15 +207,17 @@ bool lista_iter_avanzar(lista_iter_t *iter){
 
 
 void *lista_iter_ver_actual(const lista_iter_t *iter){
-	if (iter->actual == NULL) return NULL;
+	if (!iter->actual) return NULL;
 	void* valor = (iter->actual)->valor;
 	return valor;
 }
 
 
 bool lista_iter_al_final(const lista_iter_t *iter){
-	if (!(iter->actual)) return false;
-	if (!((iter->actual)->ref)) return true;
+    if (!iter) return NULL;
+	if ((!(iter->actual) && iter->anterior)\
+        || (!iter->actual && !iter->anterior))  return true;
+
 	return false;
 }
 

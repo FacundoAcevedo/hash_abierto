@@ -221,12 +221,10 @@ void prueba_hash_valor_null()
 
 void prueba_hash_volumen(size_t largo, bool debug) 
 {
-    printf("LARGO: %ui\n", largo);
-
 	hash_t* hash = hash_crear(NULL);
 
 	const size_t largo_clave = 10;
-    char (*claves)[largo_clave] = malloc(largo * largo_clave);
+	char (*claves)[largo_clave] = malloc(largo * largo_clave);
 
 	int* valores[largo];
 
@@ -236,6 +234,8 @@ void prueba_hash_volumen(size_t largo, bool debug)
 		valores[i] = malloc(sizeof(int));
 		sprintf(claves[i], "%08d", i);
 		*valores[i] = i;
+        /*Borrar*/
+        if (!claves[i]) break;
 		ok = hash_guardar(hash, claves[i], valores[i]);
 		if (!ok) break;
 	}
@@ -417,18 +417,15 @@ int main(int argc, char** argv)
 
 	if (argc < 2) {
 	    /* Ejecuta todas las pruebas unitarias. */
-    	prueba_crear_hash_vacio();
-        /*prueba_iterar_hash_vacio();*/
-		prueba_hash_insertar();
+        prueba_crear_hash_vacio();
+        prueba_iterar_hash_vacio();
+        prueba_hash_insertar();
         prueba_hash_reemplazar();
         prueba_hash_reemplazar_con_destruir();
-        puts("######## PUREBA HASH BORRAR!!!#########");
         prueba_hash_borrar();
-        puts("#####PUREBA DE VOLUMEN!!!########");
-        prueba_hash_volumen(5000, true);
-        
-        /*prueba_hash_iterar();*/
-        /*prueba_hash_iterar_volumen(5000);*/
+		/*prueba_hash_volumen(5000, true);*/
+		/*prueba_hash_iterar();*/
+		/*prueba_hash_iterar_volumen(5000);*/
 	} else {
 	    size_t largo = atoi(argv[1]);
     	prueba_hash_volumen(largo, false);
