@@ -8,16 +8,20 @@
 /*Funciones privadas */
 /*size_t _fhash(const char*, size_t);*/
 long int  _fhash(const char*, long int );
-nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato);
+/*nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato);*/
+nodo_hash_t* _nodo_hash_crear(char *clave, void *dato);
 float _factor_de_carga(hash_t *hash);
 bool  _hash_redimensionar(hash_t *hash);
 bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo);
 long int  _buscar_lista(const hash_t* hash, long int inicio);
-bool  _hash_reemplazar(hash_t* hash, const char* clave, void* dato);
+/*bool  _hash_reemplazar(hash_t* hash, const char* clave, void* dato);*/
+bool  _hash_reemplazar(hash_t* hash,char *clave, void* dato);
+char *my_strdup(const char *str);
 
 /*Struct de los nodos del hash*/
 struct nodo_hash{
-    const char *clave;
+    char *clave;
+    /*const char *clave;*/
     void *valor;
 };
 
@@ -67,6 +71,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato)
 {
 
 
+    if (!clave) return NULL;
     if (!hash) return NULL;//compurebo la existencia del hash
     //Reviso si hay que redimensionar
     if (_factor_de_carga(hash) >= (float) 0.7){
@@ -74,6 +79,7 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato)
     }//if
     //En este momento estoy seguro de que tengo un hash. 
     /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
+
     long int vect_pos = _fhash(clave, hash->tamanio);
 
     /*Verifico que haya una lista en la posicion del vector*/
@@ -82,23 +88,31 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato)
     {
         (hash->tabla[vect_pos]) = lista_crear();
     }
+    /*Copio la clave por si me la modifican desde afuer   */
+    char *clave_copia =my_strdup(clave);
+
     //Verifico si ya existe algo con esa clave
     if (hash_pertenece(hash,clave))
     {
-        if (_hash_reemplazar(hash,clave,dato)) return true;
+        if (_hash_reemplazar(hash,clave_copia,dato)){
+            /*Le doy free por la clave esta duplicada, 
+             * y no se va a volver a guardar*/
+            free(clave_copia);
+            return true;
+        }
+        free(clave_copia);
         return false;
     }//if
 
     /*Genero el nodo*/
-    nodo_hash_t *nodo_nuevo = _nodo_hash_crear(clave, dato);
+    nodo_hash_t *nodo_nuevo = _nodo_hash_crear(clave_copia, dato);
     if (!nodo_nuevo) return NULL;
 
-
-   
     /*Inserto mi nodo*/
     /*lista_insertar_primero(*((hash->tabla) + vect_pos), nodo_nuevo);*/
     lista_insertar_primero(hash->tabla[vect_pos], nodo_nuevo);
     hash->cantidad +=1;
+    printf("clave: %p, clave_c: %p\n",clave,clave_copia);
     return true;
    
 }//hash_guardar
@@ -176,9 +190,7 @@ void *hash_obtener(const hash_t *hash, const char *clave)
       nodo_actual = lista_iter_ver_actual(iter);
       //Verifico si esta
       if ( !strcmp( nodo_actual->clave, clave)){//Recordad q si son == da 0
-          /*dato = ((nodo_hash_t*) lnsta_iter_ver_actual(iter))->valor;*/
           dato = nodo_actual->valor;
-          //BORRAR
           lista_iter_destruir(iter);
           return dato; 
       }//if
@@ -224,6 +236,9 @@ void *hash_borrar(hash_t *hash, const char *clave)
           //Disminuyo la cantidad
           hash->cantidad--;
           void *dato = ((nodo_hash_t*) lista_iter_ver_actual(iter))->valor;
+          //Libero la clave
+          char *clave_borrar=  ((nodo_hash_t*) lista_iter_ver_actual(iter))->clave;
+          free(clave_borrar);
           //Bye nodo_hash_t
           free(((nodo_hash_t*) lista_borrar(lista, iter)));
           //Destruyo el iterador
@@ -256,7 +271,7 @@ void hash_destruir(hash_t *hash)
             {
                 nodo_hash_t* nodo_hash = lista_iter_ver_actual(iter);
                 /*void* dato = nodo_hash->valor;*/
-                /*free(dato);*/
+                free(nodo_hash->clave);
                 if(hash->destruir_dato) hash->destruir_dato(nodo_hash->valor);
                 free(nodo_hash);
                 lista_iter_avanzar(iter);
@@ -345,7 +360,8 @@ void hash_iter_destruir(hash_iter_t* iter)
 /*--------------PRIVADAS---------------*/
 
 //Funcion nodo_hash_crear (PRIVADA)
-nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato){
+/*nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato){*/
+nodo_hash_t* _nodo_hash_crear(char *clave, void *dato){
     nodo_hash_t* nodo_hash = NULL;
     if (! (nodo_hash = malloc(sizeof(nodo_hash_t)))) return NULL;
     nodo_hash->clave = clave;
@@ -470,19 +486,15 @@ bool _hash_trasvasar(hash_t *hash_viejo, hash_t *hash_nuevo)
     //Viendo que esta todo mas que en orden, procedo a copiar la memoria
     // adios iterador a retornar true
     /*memcpy(hash_viejo,hash_nuevo,sizeof(hash_nuevo));*/
-    memcpy(hash_viejo,hash_nuevo,sizeof(hash_t));
+    /*memcpy(hash_viejo,hash_nuevo,sizeof(hash_t));*/
     //Comprobacion del final
     if (hash_viejo->cantidad != hash_nuevo->cantidad) return false;
-    /*hago FREE, por que si uso hash_destruir mato a los nodos*/
-    /*free(hash_nuevo->tabla);*/
-    puts("\nLIBERO");
-    free(hash_nuevo);
     hash_iter_destruir(iter_hash_viejo);
     return true;
 
 }//_hash_trasvasar
 
-bool _hash_reemplazar(hash_t* hash, const char* clave, void* dato)
+bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
 {
    //Obtengo la posicion del nodo 
    /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
@@ -500,15 +512,10 @@ bool _hash_reemplazar(hash_t* hash, const char* clave, void* dato)
    {
       nodo_actual = lista_iter_ver_actual(iter);
       //Verifico si esta
-      if (!strcmp( nodo_actual->clave, clave) && nodo_actual){
-          /*if(hash->destruir_dato) hash->destruir_dato(nodo_actual->valor);*/
-          //Borro el nodo
-          nodo_actual =  lista_borrar(lista, iter);
+      if (nodo_actual && !strcmp( nodo_actual->clave, clave)){
           
           if(hash->destruir_dato) hash->destruir_dato(nodo_actual->valor);
-          free(nodo_actual);
-          lista_insertar(lista, iter, _nodo_hash_crear(clave,dato));
-          /*Destryo el iterador*/
+          nodo_actual->valor = dato;
           lista_iter_destruir(iter);
           return true; 
       }//if
@@ -529,20 +536,17 @@ bool _hash_reemplazar(hash_t* hash, const char* clave, void* dato)
 /*size_t _fhash(const char* clave, size_t tam)*/
 long int  _fhash(const char* clave, long int  tam)
 {
-    /*size_t hash=0;*/
     long int hash=0;
     long int i = 0;
-    /*for (i=0; i< (size_t) strlen(clave); i++)*/
-    /*for (i=0; i< (long int) strlen(clave); i++)*/
     while (clave[i] != '\0')
     {
-        /*hash += (size_t) atoi(&clave[i]);*/
         hash += ((long int) clave[i]+13);
         i++;
     }
-    
-    printf("\n\nTAMANIO: %li CLAVE: %s, FHASH: %li\n\n",tam,clave,hash%tam);
-    /*printf("####FHASH: %u\n",hash%tam);*/
     return hash%tam;
 }//_fhash
 
+//funcion mi_strdup
+char *my_strdup(const char *str) {
+    return strcpy(malloc( strlen(str) + 1),str);
+}//my_strdup

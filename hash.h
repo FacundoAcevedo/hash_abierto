@@ -8,7 +8,7 @@
 #include "tdas.h"
 
 
-#define TAM_INICIAL 2
+#define TAM_INICIAL 100
 //CONST_REDIM sera el incremento de tamanio en redimensionar
 #define CONST_REDIM 1
 /*
