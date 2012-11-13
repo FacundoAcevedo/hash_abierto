@@ -17,6 +17,7 @@ long int  _buscar_lista(const hash_t* hash, long int inicio);
 /*bool  _hash_reemplazar(hash_t* hash, const char* clave, void* dato);*/
 bool  _hash_reemplazar(hash_t* hash,char *clave, void* dato);
 char *my_strdup(const char *str);
+bool hash_guardar_sin_redim(hash_t *hash, const char *clave, void *dato);
 
 /*Struct de los nodos del hash*/
 struct nodo_hash{
@@ -147,7 +148,7 @@ bool hash_pertenece(const hash_t *hash, const char *clave)
    {
       nodo_actual = lista_iter_ver_actual(iter);
       //Verifico si esta
-      if (!strcmp( nodo_actual->clave, clave) && nodo_actual){
+      if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){
           lista_iter_destruir(iter);
           return true; 
       }//if
@@ -400,6 +401,8 @@ bool _hash_redimensionar(hash_t *hash)
     //Creo la copia del hash, le paso NULL por que no quiero que 
     //destruya el dato
     hash_t *hash_copia = hash_crear(NULL);
+    void* func_destruir = *hash->destruir_dato;
+    hash->destruir_dato = NULL;
     puts("Primer COPIA");
     if (!_hash_copiar(hash, hash_copia)) puts("#1 error en copia");
 
@@ -437,6 +440,7 @@ bool _hash_redimensionar(hash_t *hash)
     puts("Segunda COPIA");
     if(!_hash_copiar(hash_copia, hash)) puts ("#2 error en copia");
     hash_destruir(hash_copia);
+    hash->destruir_dato = (void*)func_destruir;
     return true;
     
 
@@ -473,7 +477,7 @@ bool _hash_copiar(hash_t *hash_origen, hash_t *hash_destino)
             //Obtengo el dato
             dato  = hash_obtener(hash_origen, clave);
             //Lo guardo en mi nuevo hash
-            hash_guardar(hash_destino, clave, dato);
+            hash_guardar_sin_redim(hash_destino, clave, dato);
         }//if
         if (indice > hash_origen->tamanio) break;
         //Avanzo el iterador
@@ -548,3 +552,34 @@ long int  _fhash(const char* clave, long int  tam)
 char *my_strdup(const char *str) {
     return strcpy(malloc( strlen(str) + 1),str);
 }//my_strdup
+
+bool hash_guardar_sin_redim(hash_t *hash, const char *clave, void *dato)
+{
+
+
+    if (!clave) return NULL;
+    if (!hash) return NULL;//compurebo la existencia del hash
+
+    long int vect_pos = _fhash(clave, hash->tamanio);
+
+    /*Verifico que haya una lista en la posicion del vector*/
+    /*if (!((hash->tabla) + vect_pos))*/
+    if (!hash->tabla[vect_pos])
+    {
+        (hash->tabla[vect_pos]) = lista_crear();
+    }
+    /*Copio la clave por si me la modifican desde afuer   */
+    char *clave_copia =my_strdup(clave);
+
+    /*Genero el nodo*/
+    nodo_hash_t *nodo_nuevo = _nodo_hash_crear(clave_copia, dato);
+    if (!nodo_nuevo) return NULL;
+
+    /*Inserto mi nodo*/
+    /*lista_insertar_primero(*((hash->tabla) + vect_pos), nodo_nuevo);*/
+    lista_insertar_primero(hash->tabla[vect_pos], nodo_nuevo);
+    hash->cantidad +=1;
+    /*printf("clave: %p, clave_c: %p\n",clave,clave_copia);*/
+    return true;
+   
+}//hash_guardar
