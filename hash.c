@@ -47,15 +47,18 @@ hash_t* hash_crear(hash_destruir_dato_t destruir_dato)
 {
     hash_t* hash = malloc(sizeof(hash_t));
     if (!hash) return NULL;
-    /*Reservo el espacio que necesito para los nodos*/
-    /*if (!(hash->tabla = (lista_t*) calloc(TAM_INICIAL, sizeof(lista_t*))))//Quizas sea nodo_hash_t**/
 
+    /*Reservo el espacio que necesito para los nodos*/
     lista_t** tabla = calloc(TAM_INICIAL, sizeof(lista_t*));
     if (!tabla)
     {
         free(hash);
         return NULL;
     }
+    for (unsigned int i = 0; i < TAM_INICIAL; i++){
+          tabla[i]=lista_crear();        
+          if(!tabla[i]) puts ("fuuck");
+    } 
     hash->tabla = tabla;
     hash->destruir_dato = destruir_dato;
     hash->cantidad = 0;
@@ -75,12 +78,10 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato)
         if (!_hash_redimensionar(hash)) return NULL;
     }//if
     //En este momento estoy seguro de que tengo un hash. 
-    /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
 
     long int vect_pos = _fhash(clave, hash->tamanio);
 
     /*Verifico que haya una lista en la posicion del vector*/
-    /*if (!((hash->tabla) + vect_pos))*/
     if (!hash->tabla[vect_pos])
     {
         (hash->tabla[vect_pos]) = lista_crear();
@@ -267,7 +268,6 @@ void hash_destruir(hash_t *hash)
             while (!lista_iter_al_final(iter))
             {
                 nodo_hash_t* nodo_hash = lista_iter_ver_actual(iter);
-                /*void* dato = nodo_hash->valor;*/
                 free(nodo_hash->clave);
                 if(hash->destruir_dato) hash->destruir_dato(nodo_hash->valor);
                 free(nodo_hash);
@@ -391,8 +391,8 @@ bool _hash_redimensionar(hash_t *hash)
     
     puts("Redimensiono");
     long int nuevoTam = hash->tamanio*5;
-    /*lista_t** vectorNuevo = malloc (sizeof(lista_t*) * nuevoTam);*/
     lista_t** vectorNuevo =  calloc(nuevoTam, sizeof(lista_t*));
+    if (!vectorNuevo) return false;
 
     //creo las sublistas
     for (unsigned int i = 0; i < nuevoTam; i++){
@@ -402,22 +402,19 @@ bool _hash_redimensionar(hash_t *hash)
       
     //voy sacando los nodos del vector original, y reubicandolos en el nuevo:
     for (unsigned int i = 0; i < hash->tamanio; i++){
-          while ( ! lista_esta_vacia(hash->tabla[i])){
-                      nodo_hash_t* nodo = lista_borrar_primero(hash->tabla[i]);
-                      int pos = _fhash(nodo->clave, nuevoTam);
-                      lista_insertar_ultimo(vectorNuevo[pos], nodo);
-          }
-    }
+          while ( !lista_esta_vacia(hash->tabla[i])){
+            nodo_hash_t* nodo = lista_borrar_primero(hash->tabla[i]);
+            int pos = _fhash(nodo->clave, nuevoTam);
+            lista_insertar_ultimo(vectorNuevo[pos], nodo);
+          }//whie
+    }//for
     
      //liberamos el vector viejo:
      free(hash->tabla);
      hash->tabla = vectorNuevo;
      hash->tamanio = nuevoTam;
-    return true;
+     return true;
     
-
- 
-
 }//_hash_redimensionar
 
 bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)

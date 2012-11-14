@@ -428,7 +428,7 @@ int main(int argc, char** argv)
 		/*prueba_hash_iterar_volumen(5000);*/
 	} else {
 	    size_t largo = atoi(argv[1]);
-    	prueba_hash_volumen(largo, false);
+    	prueba_hash_volumen(largo, true);
 	}
     return 0;
 }
