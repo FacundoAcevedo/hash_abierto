@@ -57,12 +57,10 @@ hash_t* hash_crear(hash_destruir_dato_t destruir_dato)
     }
     for (unsigned int i = 0; i < TAM_INICIAL; i++){
           tabla[i]=lista_crear();        
-          if(!tabla[i]) puts ("fuuck");
     } 
     hash->tabla = tabla;
     hash->destruir_dato = destruir_dato;
     hash->cantidad = 0;
-    /*hash->tamanio = (size_t) TAM_INICIAL;;*/
     hash->tamanio = (long int) TAM_INICIAL;;
     return hash;
 }//hash_crear
