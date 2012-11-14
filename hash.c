@@ -50,8 +50,7 @@ hash_t* hash_crear(hash_destruir_dato_t destruir_dato)
     /*Reservo el espacio que necesito para los nodos*/
     /*if (!(hash->tabla = (lista_t*) calloc(TAM_INICIAL, sizeof(lista_t*))))//Quizas sea nodo_hash_t**/
 
-    void* tabla;
-    tabla = (lista_t*) calloc(TAM_INICIAL, sizeof(lista_t*));
+    lista_t** tabla = calloc(TAM_INICIAL, sizeof(lista_t*));
     if (!tabla)
     {
         free(hash);
@@ -392,7 +391,8 @@ bool _hash_redimensionar(hash_t *hash)
     
     puts("Redimensiono");
     long int nuevoTam = hash->tamanio*5;
-    lista_t** vectorNuevo = malloc (sizeof(lista_t*) * nuevoTam);
+    /*lista_t** vectorNuevo = malloc (sizeof(lista_t*) * nuevoTam);*/
+    lista_t** vectorNuevo =  calloc(nuevoTam, sizeof(lista_t*));
 
     //creo las sublistas
     for (unsigned int i = 0; i < nuevoTam; i++){
