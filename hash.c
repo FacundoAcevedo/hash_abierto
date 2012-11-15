@@ -33,10 +33,7 @@ struct hash{
 };
 
 struct hash_iter{
-    /*nodo_t* anterior;*/
-    /*nodo_t* actual;*/
     const hash_t *hash; //FTW!
-    /*size_t pos_vect;*/
     long int pos_vect;
     lista_iter_t *iter_lista;
 };
@@ -286,9 +283,7 @@ hash_iter_t *hash_iter_crear(const hash_t *hash)
     if (!hash) return NULL;
     hash_iter_t *iter = malloc(sizeof(hash_iter_t));
     iter->hash = hash;
-    /*iter->anterior = NULL;*/
     if (hash->cantidad ==0){
-        /*iter->actual = NULL;*/
         iter->iter_lista = NULL;
         iter->pos_vect=-1;
         return iter;
@@ -332,7 +327,8 @@ bool hash_iter_avanzar(hash_iter_t *iter)
 const char *hash_iter_ver_actual(const hash_iter_t *iter)
 {
     if (iter->hash->cantidad == 0) return NULL;
-    if (! lista_iter_ver_actual(iter->iter_lista)) return NULL;
+    else if (! lista_iter_ver_actual(iter->iter_lista)) return NULL;
+    if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;
     return ( ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );
 
 }//hash_iter_ver_actual
@@ -405,6 +401,8 @@ bool _hash_redimensionar(hash_t *hash)
             int pos = _fhash(nodo->clave, nuevoTam);
             lista_insertar_ultimo(vectorNuevo[pos], nodo);
           }//whie
+          /*Destruyo las listas*/
+          lista_destruir(hash->tabla[i], NULL);
     }//for
     
      //liberamos el vector viejo:
