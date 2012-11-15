@@ -328,8 +328,9 @@ const char *hash_iter_ver_actual(const hash_iter_t *iter)
 {
     if (iter->hash->cantidad == 0) return NULL;
     else if (! lista_iter_ver_actual(iter->iter_lista)) return NULL;
-    if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;
-    return ( ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );
+    else if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;
+    /*return ( ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );*/
+    return ((char*) ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );
 
 }//hash_iter_ver_actual
 
