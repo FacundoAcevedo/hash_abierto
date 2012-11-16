@@ -215,7 +215,7 @@ void *lista_iter_ver_actual(const lista_iter_t *iter){
 
 bool lista_iter_al_final(const lista_iter_t *iter){
     if (!iter) return NULL;
-	if ((!(iter->actual) && iter->anterior)\
+	else if ((!(iter->actual) && iter->anterior)\
         || (!iter->actual && !iter->anterior))  return true;
 
 	return false;

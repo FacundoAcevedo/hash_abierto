@@ -333,8 +333,7 @@ const char *hash_iter_ver_actual(const hash_iter_t *iter)
 bool hash_iter_al_final(const hash_iter_t *iter)
 {
     if (hash_cantidad(iter->hash) <=0) return true;
-    else if (lista_iter_al_final(iter->iter_lista) && \
-        iter->hash->cantidad == iter->pos_vect) return true;
+    else if (lista_iter_al_final(iter->iter_lista)) return true;
     /*else if (_buscar_lista(iter->hash, iter->pos_vect +1) == -1 ) return true;*/
     return false;
 
