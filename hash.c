@@ -303,8 +303,14 @@ bool hash_iter_avanzar(hash_iter_t *iter)
         //busco la siguiente lista
         long int pos = _buscar_lista(iter->hash,(long int) (iter->pos_vect +1));
         if (pos == -1) return false; // no hay mas listas campeon
+        /*if (pos == -1){*/
+            /*if (!lista_iter_ver_actual(iter->iter_lista)) return false;*/
+            /*[>lista_iter_avanzar(iter->iter_lista);<]*/
+            /*return true;*/
+        /*}// no hay mas listas campeon*/
         // hay otra lista, entonces destruyo el iterador viejo y le doy paso 
         // a la juventud
+        iter->pos_vect  = pos;
         lista_iter_destruir(iter->iter_lista);
         iter->iter_lista = lista_iter_crear(iter->hash->tabla[pos]);
         return true;
@@ -329,7 +335,7 @@ bool hash_iter_al_final(const hash_iter_t *iter)
     if (hash_cantidad(iter->hash) <=0) return true;
     else if (lista_iter_al_final(iter->iter_lista) && \
         iter->hash->cantidad == iter->pos_vect) return true;
-    else if (_buscar_lista(iter->hash, iter->pos_vect +1) == -1 ) return true;
+    /*else if (_buscar_lista(iter->hash, iter->pos_vect +1) == -1 ) return true;*/
     return false;
 
 }//hash_iter_al_final
