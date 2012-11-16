@@ -6,9 +6,7 @@
 /*HASH ABIERTO POR QUE ES MAS FACIL*/
 
 /*Funciones privadas */
-/*size_t _fhash(const char*, size_t);*/
 long int  _fhash(const char*, long int );
-/*nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato);*/
 nodo_hash_t* _nodo_hash_crear(char *clave, void *dato);
 float _factor_de_carga(hash_t *hash);
 bool  _hash_redimensionar(hash_t *hash);
@@ -19,14 +17,12 @@ char *my_strdup(const char *str);
 /*Struct de los nodos del hash*/
 struct nodo_hash{
     char *clave;
-    /*const char *clave;*/
     void *valor;
 };
 
 
 struct hash{
     size_t cantidad;
-    /*size_t tamanio;*/
     long int tamanio;
     hash_destruir_dato_t destruir_dato;
     lista_t** tabla;
@@ -102,10 +98,8 @@ bool hash_guardar(hash_t *hash, const char *clave, void *dato)
     if (!nodo_nuevo) return NULL;
 
     /*Inserto mi nodo*/
-    /*lista_insertar_primero(*((hash->tabla) + vect_pos), nodo_nuevo);*/
     lista_insertar_primero(hash->tabla[vect_pos], nodo_nuevo);
     hash->cantidad +=1;
-    /*printf("clave: %p, clave_c: %p\n",clave,clave_copia);*/
     return true;
    
 }//hash_guardar
@@ -120,16 +114,13 @@ size_t hash_cantidad(const hash_t *hash)
 bool hash_pertenece(const hash_t *hash, const char *clave)
 {
    //Obtengo la posicion del nodo 
-   /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
    long int vect_pos = _fhash(clave, hash->tamanio);
    
    //Voy a dicha posicion y recorro los nodos
-   /*if (!((hash->tabla) + vect_pos)) return false;*/
    if (!hash->tabla[vect_pos]) return false;
 
    //Creo lo que nececito
    nodo_hash_t* nodo_actual = NULL;
-   /*lista_t* lista = *((hash->tabla) + vect_pos);*/
    lista_t* lista = hash->tabla[vect_pos];
    lista_iter_t* iter = lista_iter_crear(lista);
    
@@ -164,7 +155,6 @@ void *hash_obtener(const hash_t *hash, const char *clave)
    void *dato = NULL;
 
    //Obtengo la posicion del nodo 
-   /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
    long int vect_pos = _fhash(clave, hash->tamanio);
    
    //Voy a dicha posicion y recorro los nodos
@@ -204,16 +194,13 @@ void *hash_borrar(hash_t *hash, const char *clave)
 {
     //... C&P de hash_obtener y toqueteo un poco
    //Obtengo la posicion del nodo 
-   /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
    long int vect_pos = _fhash(clave, hash->tamanio);
    
    //Voy a dicha posicion y recorro los nodos
-   /*if (!((hash->tabla) + vect_pos)) return false;*/
    if (!hash->tabla[vect_pos]) return NULL;
 
    //Creo lo que nececito
    nodo_hash_t* nodo_actual = NULL;
-   /*lista_t* lista = *((hash->tabla) + vect_pos);*/
    lista_t* lista = hash->tabla[vect_pos];
    lista_iter_t* iter = lista_iter_crear(lista);
    
@@ -289,12 +276,15 @@ hash_iter_t *hash_iter_crear(const hash_t *hash)
         return iter;
     }//iter
     /*Busco la primer lista*/
-    /*size_t pos = _buscar_lista(hash,0);*/
     long int pos = _buscar_lista(hash,0);
     if (pos !=  -1)
     {
-        //Me paro en el primer nodo SIII!!!!!
+        //Me paro en el primer nodo
         iter->iter_lista = lista_iter_crear(hash->tabla[pos]);
+        if (!iter->iter_lista){
+            free(iter);
+            return NULL;
+        }//if
         iter->pos_vect = pos;
         return iter;
     }
@@ -307,6 +297,7 @@ bool hash_iter_avanzar(hash_iter_t *iter)
 {
     if (hash_cantidad(iter->hash) <=0) return false;
     //si estoy al final de una lista
+    lista_iter_avanzar(iter->iter_lista);
     if (lista_iter_al_final(iter->iter_lista))
     {
         //busco la siguiente lista
@@ -320,7 +311,7 @@ bool hash_iter_avanzar(hash_iter_t *iter)
     } //if
     
     //si estoy en medio de la lista
-    lista_iter_avanzar(iter->iter_lista);
+    /*lista_iter_avanzar(iter->iter_lista);*/
     return true;
 }//hash_iter_avanzar
 
@@ -328,8 +319,7 @@ const char *hash_iter_ver_actual(const hash_iter_t *iter)
 {
     if (iter->hash->cantidad == 0) return NULL;
     else if (! lista_iter_ver_actual(iter->iter_lista)) return NULL;
-    else if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;
-    /*return ( ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );*/
+    /*else if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;*/
     return ((char*) ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );
 
 }//hash_iter_ver_actual
@@ -337,8 +327,9 @@ const char *hash_iter_ver_actual(const hash_iter_t *iter)
 bool hash_iter_al_final(const hash_iter_t *iter)
 {
     if (hash_cantidad(iter->hash) <=0) return true;
-    if (lista_iter_al_final(iter->iter_lista) && \
+    else if (lista_iter_al_final(iter->iter_lista) && \
         iter->hash->cantidad == iter->pos_vect) return true;
+    else if (_buscar_lista(iter->hash, iter->pos_vect +1) == -1 ) return true;
     return false;
 
 }//hash_iter_al_final
@@ -352,7 +343,6 @@ void hash_iter_destruir(hash_iter_t* iter)
 /*--------------PRIVADAS---------------*/
 
 //Funcion nodo_hash_crear (PRIVADA)
-/*nodo_hash_t* _nodo_hash_crear(const char *clave, void *dato){*/
 nodo_hash_t* _nodo_hash_crear(char *clave, void *dato){
     nodo_hash_t* nodo_hash = NULL;
     if (! (nodo_hash = malloc(sizeof(nodo_hash_t)))) return NULL;
@@ -366,9 +356,10 @@ nodo_hash_t* _nodo_hash_crear(char *clave, void *dato){
 long int _buscar_lista(const hash_t* hash,long int inicio)
 {
     long int i;
+    if( inicio > hash->tamanio) return -1;
     for (i=inicio; i<hash->tamanio; i++)
     {
-        if (hash->tabla[i]) return i;
+        if (hash->tabla[i] && lista_largo(((lista_t*) hash->tabla[i]))!=0) return i;
     }
     return -1; //Devuelvo -1 por que si es 0 se confunde con null
 }//_buscar_primer_lista
@@ -417,7 +408,6 @@ bool _hash_redimensionar(hash_t *hash)
 bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
 {
    //Obtengo la posicion del nodo 
-   /*size_t vect_pos = _fhash(clave, hash->tamanio);*/
    long int vect_pos = _fhash(clave, hash->tamanio);
    
    nodo_hash_t* nodo_actual = NULL;
@@ -427,7 +417,6 @@ bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
    //Verifico que existan
    if (!lista || !iter) return NULL;
    //Recorro la lista buscando la clave
-   //while(lista_iter_ver_actual(iter))
    while(!lista_iter_al_final(iter))
    {
       nodo_actual = lista_iter_ver_actual(iter);
@@ -452,7 +441,6 @@ bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
 }//_hash_reemplazar
 
 //Funcion HASH (PRIVADA)
-/*size_t _fhash(const char* clave, size_t tam)*/
 long int  _fhash(const char* clave, long int  tam)
 {
     long int hash=0;
