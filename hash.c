@@ -12,6 +12,8 @@ float _factor_de_carga(hash_t *hash);
 bool  _hash_redimensionar(hash_t *hash);
 long int  _buscar_lista(const hash_t* hash, long int inicio);
 bool  _hash_reemplazar(hash_t* hash,char *clave, void* dato);
+/*lista_t* _obtenerListaOcupante(const hash_t *hash,const  char* clave, int vect_pos);*/
+void**  _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vect_pos);
 char *my_strdup(const char *str);
 
 /*Struct de los nodos del hash*/
@@ -113,80 +115,102 @@ size_t hash_cantidad(const hash_t *hash)
 
 bool hash_pertenece(const hash_t *hash, const char *clave)
 {
-   //Obtengo la posicion del nodo 
+   //Obtengo la posicion del nodo
    long int vect_pos = _fhash(clave, hash->tamanio);
    
-   //Voy a dicha posicion y recorro los nodos
-   if (!hash->tabla[vect_pos]) return false;
+   /*//Voy a dicha posicion y recorro los nodos*/
+   /*[>if (!hash->tabla[vect_pos]) return false;<]*/
 
-   //Creo lo que nececito
-   nodo_hash_t* nodo_actual = NULL;
-   lista_t* lista = hash->tabla[vect_pos];
-   lista_iter_t* iter = lista_iter_crear(lista);
+   /*//Creo lo que nececito*/
+   /*nodo_hash_t* nodo_actual = NULL;*/
+   /*lista_t* lista = hash->tabla[vect_pos];*/
+   /*lista_iter_t* iter = lista_iter_crear(lista);*/
    
-   //Verifico que existan
-   if (!lista || !iter) return NULL;
-   //Recorro la lista buscando la clave
-   while(lista_iter_ver_actual(iter))
-   {
-      nodo_actual = lista_iter_ver_actual(iter);
-      //Verifico si esta
-      if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){
-          lista_iter_destruir(iter);
-          return true; 
-      }//if
+   /*//Verifico que existan*/
+   /*if (!lista || !iter) return NULL;*/
+   /*//Recorro la lista buscando la clave*/
+   /*while(lista_iter_ver_actual(iter))*/
+   /*{*/
+      /*nodo_actual = lista_iter_ver_actual(iter);*/
+      /*//Verifico si esta*/
+      /*if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){*/
+          /*lista_iter_destruir(iter);*/
+          /*return true; */
+      /*}//if*/
 
-      //No esta, entonces avanzo una pocicion
-      lista_iter_avanzar(iter);
+      /*//No esta, entonces avanzo una pocicion*/
+      /*lista_iter_avanzar(iter);*/
 
-   }
-   lista_iter_destruir(iter);
+   /*}*/
+   /*lista_iter_destruir(iter);*/
 
-   //No la encontre, pucha!
+   /*//No la encontre, pucha!*/
+   /*return false;*/
+
+   if (_obtenerListaOcupante( hash, clave, vect_pos)) return true;
    return false;
 
 }//hash_pertenece
 
 void *hash_obtener(const hash_t *hash, const char *clave)
 {
-    /*EAEA se parece a hash_pertenece... asi que C&P y toqueteo*/
-    /*PD: estos comentarios nos van a hacer desaprobar...*/
+    /*[>EAEA se parece a hash_pertenece... asi que C&P y toqueteo<]*/
+    /*[>PD: estos comentarios nos van a hacer desaprobar...<]*/
 
-   void *dato = NULL;
+   /*void *dato = NULL;*/
 
-   //Obtengo la posicion del nodo 
+   //Obtengo la posicion del nodo
    long int vect_pos = _fhash(clave, hash->tamanio);
    
-   //Voy a dicha posicion y recorro los nodos
-   if (!hash->tabla[vect_pos]) return NULL;
+   /*//Voy a dicha posicion y recorro los nodos*/
+   /*if (!hash->tabla[vect_pos]) return NULL;*/
 
-   //Creo lo que nececito
-   nodo_hash_t* nodo_actual = NULL;
-   lista_t* lista = hash->tabla[vect_pos];
-   lista_iter_t* iter = lista_iter_crear(lista);
+   /*//Creo lo que nececito*/
+   /*nodo_hash_t* nodo_actual = NULL;*/
+   /*lista_t* lista = hash->tabla[vect_pos];*/
+   /*lista_iter_t* iter = lista_iter_crear(lista);*/
    
-   //Verifico que existan
-   if (!lista || !iter) return NULL;
-   //Recorro la lista buscando la clave
-   while(lista_iter_ver_actual(iter))
-   {
-      nodo_actual = lista_iter_ver_actual(iter);
-      //Verifico si esta
-      if ( !strcmp( nodo_actual->clave, clave)){//Recordad q si son == da 0
-          dato = nodo_actual->valor;
-          lista_iter_destruir(iter);
-          return dato; 
-      }//if
+   /*//Verifico que existan*/
+   /*if (!lista || !iter) return NULL;*/
+   /*//Recorro la lista buscando la clave*/
+   /*while(lista_iter_ver_actual(iter))*/
+   /*{*/
+      /*nodo_actual = lista_iter_ver_actual(iter);*/
+      /*//Verifico si esta*/
+      /*if ( !strcmp( nodo_actual->clave, clave)){//Recordad q si son == da 0*/
+          /*dato = nodo_actual->valor;*/
+          /*lista_iter_destruir(iter);*/
+          /*return dato; */
+      /*}//if*/
 
-      //No esta, entonces avanzo una pocicion
-      lista_iter_avanzar(iter);
+      /*//No esta, entonces avanzo una pocicion*/
+      /*lista_iter_avanzar(iter);*/
 
-   }//while
-   lista_iter_destruir(iter);
+   /*}//while*/
+   /*lista_iter_destruir(iter);*/
 
-   //No la encontre, pucha!
-   return NULL;
+   /*//No la encontre, pucha!*/
+   /*return NULL;*/
 
+   
+   void** vector_lnp =  _obtenerListaOcupante(hash, clave, vect_pos);
+   if (!vector_lnp) return NULL;
+   //obtengo el nodo
+   //
+   // posiciones:
+   //   0->dir lista 1-> nodo 2-> pos en lista
+   //
+   nodo_hash_t* nodo = (nodo_hash_t*) (vector_lnp[1]);
+
+   //libero el vector recibido
+   free(vector_lnp);
+
+   //devuelvo lo obtenido
+   /*printf("clave %s\n", ((nodo_hash_t*) dir_nodo)->valor); */
+   /*return (void*) ((nodo_hash_t*) &dir_nodo)->valor; */
+   return (nodo)->valor;
+    
+    
 }//*hash_obtener
 
 
@@ -444,6 +468,59 @@ bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
     
 
 }//_hash_reemplazar
+
+/*lista_t* _obtenerListaOcupante(const hash_t *hash,const  char* clave, int vect_pos)*/
+void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vect_pos)
+{
+   //Devuelvo un vector donde en 0 tiene la direccion de la lista,
+   // en 1 el nodo y en 2  la pocicion ( dentro de la liasta) 
+   // donde esta el nodo
+   
+   /*void* listaynodo = malloc( 3 * sizeof(void*));*/
+   void* listaynodo[3];
+   //Voy a dicha posicion y recorro los nodos
+   if (!hash->tabla[vect_pos]) return NULL;
+
+   //Creo lo que nececito
+   nodo_hash_t* nodo_actual = NULL;
+   lista_t* lista = hash->tabla[vect_pos];
+   lista_iter_t* iter = lista_iter_crear(lista);
+   
+   //Verifico que existan
+   if (!lista || !iter) return NULL;
+
+   size_t indice = 0; //no se cual es el maximo de un size_t
+   //pero no creo que la lista se llene tanto como para que explote
+   //si pasa, revisar ACA.
+
+   //Recorro la lista buscando la clave
+   while(lista_iter_ver_actual(iter))
+   {
+      nodo_actual = lista_iter_ver_actual(iter);
+      //Verifico si esta
+      if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){
+          lista_iter_destruir(iter);
+          listaynodo[0] = lista;
+          listaynodo[1] = nodo_actual;
+          listaynodo[2] = &indice;
+          
+          //Hay que destruirlo!
+          return *listaynodo;
+          
+          /*return lista; */
+      }//if
+
+      //No esta, entonces avanzo una pocicion
+      lista_iter_avanzar(iter);
+      indice++;
+
+   }
+   lista_iter_destruir(iter);
+
+   //No la encontre, pucha!
+   return NULL;
+
+}//_obtenerListaOcupante
 
 //Funcion HASH (PRIVADA)
 long int  _fhash(const char* clave, long int  tam)
