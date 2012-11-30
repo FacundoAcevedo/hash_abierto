@@ -477,7 +477,7 @@ void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vec
    // donde esta el nodo
    
    /*void* listaynodo = malloc( 3 * sizeof(void*));*/
-   void* listaynodo[3];
+   void** listaynodo = malloc(sizeof(void*)*3);
    //Voy a dicha posicion y recorro los nodos
    if (!hash->tabla[vect_pos]) return NULL;
 
@@ -489,7 +489,8 @@ void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vec
    //Verifico que existan
    if (!lista || !iter) return NULL;
 
-   size_t indice = 0; //no se cual es el maximo de un size_t
+   size_t indice = 0;
+   size_t *pindice=NULL; //no se cual es el maximo de un size_t
    //pero no creo que la lista se llene tanto como para que explote
    //si pasa, revisar ACA.
 
@@ -500,12 +501,13 @@ void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vec
       //Verifico si esta
       if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){
           lista_iter_destruir(iter);
+          pindice=&indice;
           listaynodo[0] = lista;
           listaynodo[1] = nodo_actual;
-          listaynodo[2] = &indice;
+          listaynodo[2] = pindice;
           
           //Hay que destruirlo!
-          return *listaynodo;
+          return listaynodo;
           
           /*return lista; */
       }//if
