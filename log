@@ -1,0 +1,343 @@
+==5293== Memcheck, a memory error detector
+==5293== Copyright (C) 2002-2012, and GNU GPL'd, by Julian Seward et al.
+==5293== Using Valgrind-3.8.1 and LibVEX; rerun with -h for copyright info
+==5293== Command: ./prueba_hash
+==5293== Parent PID: 2438
+==5293== 
+==5293== Invalid read of size 4
+==5293==    at 0x804929E: hash_borrar (hash.c:153)
+==5293==    by 0x8049DE7: prueba_hash_insertar (prueba_hash.c:71)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293==  Address 0xbeeed748 is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==5293== 
+==5293== Invalid read of size 4
+==5293==    at 0x804929E: hash_borrar (hash.c:153)
+==5293==    by 0x804A618: prueba_hash_borrar (prueba_hash.c:166)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293==  Address 0xbeeed748 is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==5293== 
+==5293== Invalid read of size 4
+==5293==    at 0x804929E: hash_borrar (hash.c:153)
+==5293==    by 0x804A716: prueba_hash_borrar (prueba_hash.c:173)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293==  Address 0xbeeed748 is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==5293== 
+==5293== Invalid read of size 4
+==5293==    at 0x804929E: hash_borrar (hash.c:153)
+==5293==    by 0x804A814: prueba_hash_borrar (prueba_hash.c:180)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293==  Address 0xbeeed748 is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==5293== 
+==5293== Invalid read of size 4
+==5293==    at 0x804929E: hash_borrar (hash.c:153)
+==5293==    by 0x804AD8B: prueba_hash_volumen (prueba_hash.c:259)
+==5293==    by 0x804B51B: main (prueba_hash.c:426)
+==5293==  Address 0xbeee88f8 is just below the stack ptr.  To suppress, use: --workaround-gcc296-bugs=yes
+==5293== 
+==5293== 
+==5293== HEAP SUMMARY:
+==5293==     in use at exit: 240,420 bytes in 20,035 blocks
+==5293==   total heap usage: 219,051 allocs, 199,016 frees, 2,362,692 bytes allocated
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 1 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x804920E: hash_obtener (hash.c:126)
+==5293==    by 0x8049B7F: prueba_crear_hash_vacio (prueba_hash.c:37)
+==5293==    by 0x804B4EE: main (prueba_hash.c:420)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 2 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x8049BAA: prueba_crear_hash_vacio (prueba_hash.c:38)
+==5293==    by 0x804B4EE: main (prueba_hash.c:420)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 3 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x8049271: hash_borrar (hash.c:148)
+==5293==    by 0x8049BE1: prueba_crear_hash_vacio (prueba_hash.c:39)
+==5293==    by 0x804B4EE: main (prueba_hash.c:420)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 4 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x8049D23: prueba_hash_insertar (prueba_hash.c:66)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 5 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x8049DC2: prueba_hash_insertar (prueba_hash.c:70)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 6 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x8049E3C: prueba_hash_insertar (prueba_hash.c:75)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 7 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x8049EDB: prueba_hash_insertar (prueba_hash.c:79)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 8 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x8049F07: prueba_hash_insertar (prueba_hash.c:81)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 9 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x8049FA6: prueba_hash_insertar (prueba_hash.c:85)
+==5293==    by 0x804B4F8: main (prueba_hash.c:422)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 10 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A01E: prueba_hash_reemplazar (prueba_hash.c:98)
+==5293==    by 0x804B4FD: main (prueba_hash.c:423)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 11 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A0A0: prueba_hash_reemplazar (prueba_hash.c:101)
+==5293==    by 0x804B4FD: main (prueba_hash.c:423)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 12 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A146: prueba_hash_reemplazar (prueba_hash.c:106)
+==5293==    by 0x804B4FD: main (prueba_hash.c:423)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 13 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A1C8: prueba_hash_reemplazar (prueba_hash.c:109)
+==5293==    by 0x804B4FD: main (prueba_hash.c:423)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 14 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A2DA: prueba_hash_reemplazar_con_destruir (prueba_hash.c:131)
+==5293==    by 0x804B502: main (prueba_hash.c:424)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 15 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A35C: prueba_hash_reemplazar_con_destruir (prueba_hash.c:134)
+==5293==    by 0x804B502: main (prueba_hash.c:424)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 16 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A402: prueba_hash_reemplazar_con_destruir (prueba_hash.c:139)
+==5293==    by 0x804B502: main (prueba_hash.c:424)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 17 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A484: prueba_hash_reemplazar_con_destruir (prueba_hash.c:142)
+==5293==    by 0x804B502: main (prueba_hash.c:424)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 18 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A576: prueba_hash_borrar (prueba_hash.c:160)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 19 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A5A2: prueba_hash_borrar (prueba_hash.c:161)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 20 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804A5CE: prueba_hash_borrar (prueba_hash.c:162)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 21 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A5F3: prueba_hash_borrar (prueba_hash.c:165)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 22 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x8049271: hash_borrar (hash.c:148)
+==5293==    by 0x804A643: prueba_hash_borrar (prueba_hash.c:167)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 23 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A66D: prueba_hash_borrar (prueba_hash.c:168)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 24 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x804920E: hash_obtener (hash.c:126)
+==5293==    by 0x804A6A3: prueba_hash_borrar (prueba_hash.c:169)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 25 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A6F1: prueba_hash_borrar (prueba_hash.c:172)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 26 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x8049271: hash_borrar (hash.c:148)
+==5293==    by 0x804A741: prueba_hash_borrar (prueba_hash.c:174)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 27 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A76B: prueba_hash_borrar (prueba_hash.c:175)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 28 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x804920E: hash_obtener (hash.c:126)
+==5293==    by 0x804A7A1: prueba_hash_borrar (prueba_hash.c:176)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 29 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A7EF: prueba_hash_borrar (prueba_hash.c:179)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 30 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x8049271: hash_borrar (hash.c:148)
+==5293==    by 0x804A83F: prueba_hash_borrar (prueba_hash.c:181)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 31 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804A869: prueba_hash_borrar (prueba_hash.c:182)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 32 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x804920E: hash_obtener (hash.c:126)
+==5293==    by 0x804A89F: prueba_hash_borrar (prueba_hash.c:183)
+==5293==    by 0x804B507: main (prueba_hash.c:425)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 33 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804AF27: prueba_hash_iterar (prueba_hash.c:300)
+==5293==    by 0x804B520: main (prueba_hash.c:427)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 34 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804AF53: prueba_hash_iterar (prueba_hash.c:301)
+==5293==    by 0x804B520: main (prueba_hash.c:427)
+==5293== 
+==5293== 12 bytes in 1 blocks are definitely lost in loss record 35 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804AF7F: prueba_hash_iterar (prueba_hash.c:302)
+==5293==    by 0x804B520: main (prueba_hash.c:427)
+==5293== 
+==5293== 60,000 bytes in 5,000 blocks are definitely lost in loss record 36 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804AC3A: prueba_hash_volumen (prueba_hash.c:239)
+==5293==    by 0x804B51B: main (prueba_hash.c:426)
+==5293== 
+==5293== 60,000 bytes in 5,000 blocks are definitely lost in loss record 37 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x804ACC8: prueba_hash_volumen (prueba_hash.c:248)
+==5293==    by 0x804B51B: main (prueba_hash.c:426)
+==5293== 
+==5293== 60,000 bytes in 5,000 blocks are definitely lost in loss record 38 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804AE4A: prueba_hash_volumen (prueba_hash.c:273)
+==5293==    by 0x804B51B: main (prueba_hash.c:426)
+==5293== 
+==5293== 60,000 bytes in 5,000 blocks are definitely lost in loss record 39 of 39
+==5293==    at 0x402B6A8: malloc (in /usr/lib/valgrind/vgpreload_memcheck-x86-linux.so)
+==5293==    by 0x8049968: _obtenerListaOcupante (hash.c:389)
+==5293==    by 0x80491C5: hash_pertenece (hash.c:117)
+==5293==    by 0x80490E6: hash_guardar (hash.c:83)
+==5293==    by 0x804B332: prueba_hash_iterar_volumen (prueba_hash.c:360)
+==5293==    by 0x804B52C: main (prueba_hash.c:428)
+==5293== 
+==5293== LEAK SUMMARY:
+==5293==    definitely lost: 240,420 bytes in 20,035 blocks
+==5293==    indirectly lost: 0 bytes in 0 blocks
+==5293==      possibly lost: 0 bytes in 0 blocks
+==5293==    still reachable: 0 bytes in 0 blocks
+==5293==         suppressed: 0 bytes in 0 blocks
+==5293== 
+==5293== For counts of detected and suppressed errors, rerun with: -v
+==5293== ERROR SUMMARY: 5043 errors from 44 contexts (suppressed: 0 from 0)

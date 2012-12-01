@@ -1,10 +1,6 @@
 #include "hash.h"
 
 
-
-
-/*HASH ABIERTO POR QUE ES MAS FACIL*/
-
 /*Funciones privadas */
 long int  _fhash(const char*, long int );
 nodo_hash_t* _nodo_hash_crear(char *clave, void *dato);
@@ -12,7 +8,6 @@ float _factor_de_carga(hash_t *hash);
 bool  _hash_redimensionar(hash_t *hash);
 long int  _buscar_lista(const hash_t* hash, long int inicio);
 bool  _hash_reemplazar(hash_t* hash,char *clave, void* dato);
-/*lista_t* _obtenerListaOcupante(const hash_t *hash,const  char* clave, int vect_pos);*/
 void**  _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vect_pos);
 char *my_strdup(const char *str);
 
@@ -31,7 +26,7 @@ struct hash{
 };
 
 struct hash_iter{
-    const hash_t *hash; //FTW!
+    const hash_t *hash; 
     long int pos_vect;
     lista_iter_t *iter_lista;
 };
@@ -117,82 +112,17 @@ bool hash_pertenece(const hash_t *hash, const char *clave)
 {
    //Obtengo la posicion del nodo
    long int vect_pos = _fhash(clave, hash->tamanio);
-   
-   /*//Voy a dicha posicion y recorro los nodos*/
-   /*[>if (!hash->tabla[vect_pos]) return false;<]*/
-
-   /*//Creo lo que nececito*/
-   /*nodo_hash_t* nodo_actual = NULL;*/
-   /*lista_t* lista = hash->tabla[vect_pos];*/
-   /*lista_iter_t* iter = lista_iter_crear(lista);*/
-   
-   /*//Verifico que existan*/
-   /*if (!lista || !iter) return NULL;*/
-   /*//Recorro la lista buscando la clave*/
-   /*while(lista_iter_ver_actual(iter))*/
-   /*{*/
-      /*nodo_actual = lista_iter_ver_actual(iter);*/
-      /*//Verifico si esta*/
-      /*if ( !strcmp( nodo_actual->clave, clave) && nodo_actual){*/
-          /*lista_iter_destruir(iter);*/
-          /*return true; */
-      /*}//if*/
-
-      /*//No esta, entonces avanzo una pocicion*/
-      /*lista_iter_avanzar(iter);*/
-
-   /*}*/
-   /*lista_iter_destruir(iter);*/
-
-   /*//No la encontre, pucha!*/
-   /*return false;*/
-
-   if (_obtenerListaOcupante( hash, clave, vect_pos)) return true;
-   return false;
+   void** vector_lnp =  _obtenerListaOcupante(hash, clave, vect_pos);
+   if (!vector_lnp) return false;
+   free(vector_lnp);
+   return true;
 
 }//hash_pertenece
 
 void *hash_obtener(const hash_t *hash, const char *clave)
 {
-    /*[>EAEA se parece a hash_pertenece... asi que C&P y toqueteo<]*/
-    /*[>PD: estos comentarios nos van a hacer desaprobar...<]*/
-
-   /*void *dato = NULL;*/
-
    //Obtengo la posicion del nodo
    long int vect_pos = _fhash(clave, hash->tamanio);
-   
-   /*//Voy a dicha posicion y recorro los nodos*/
-   /*if (!hash->tabla[vect_pos]) return NULL;*/
-
-   /*//Creo lo que nececito*/
-   /*nodo_hash_t* nodo_actual = NULL;*/
-   /*lista_t* lista = hash->tabla[vect_pos];*/
-   /*lista_iter_t* iter = lista_iter_crear(lista);*/
-   
-   /*//Verifico que existan*/
-   /*if (!lista || !iter) return NULL;*/
-   /*//Recorro la lista buscando la clave*/
-   /*while(lista_iter_ver_actual(iter))*/
-   /*{*/
-      /*nodo_actual = lista_iter_ver_actual(iter);*/
-      /*//Verifico si esta*/
-      /*if ( !strcmp( nodo_actual->clave, clave)){//Recordad q si son == da 0*/
-          /*dato = nodo_actual->valor;*/
-          /*lista_iter_destruir(iter);*/
-          /*return dato; */
-      /*}//if*/
-
-      /*//No esta, entonces avanzo una pocicion*/
-      /*lista_iter_avanzar(iter);*/
-
-   /*}//while*/
-   /*lista_iter_destruir(iter);*/
-
-   /*//No la encontre, pucha!*/
-   /*return NULL;*/
-
-   
    void** vector_lnp =  _obtenerListaOcupante(hash, clave, vect_pos);
    if (!vector_lnp) return NULL;
    //obtengo el nodo
@@ -206,59 +136,37 @@ void *hash_obtener(const hash_t *hash, const char *clave)
    free(vector_lnp);
 
    //devuelvo lo obtenido
-   /*printf("clave %s\n", ((nodo_hash_t*) dir_nodo)->valor); */
-   /*return (void*) ((nodo_hash_t*) &dir_nodo)->valor; */
    return (nodo)->valor;
-    
-    
 }//*hash_obtener
 
 
 void *hash_borrar(hash_t *hash, const char *clave)
 {
-    //... C&P de hash_obtener y toqueteo un poco
-   //Obtengo la posicion del nodo 
    long int vect_pos = _fhash(clave, hash->tamanio);
-   
-   //Voy a dicha posicion y recorro los nodos
-   if (!hash->tabla[vect_pos]) return NULL;
+   void** vector_lnp =  _obtenerListaOcupante(hash, clave, vect_pos);
+   if (!vector_lnp) return NULL;
 
-   //Creo lo que nececito
-   nodo_hash_t* nodo_actual = NULL;
-   lista_t* lista = hash->tabla[vect_pos];
+   lista_t* lista = (lista_t*) (vector_lnp[0]);
+   nodo_hash_t* nodo = (nodo_hash_t*) (vector_lnp[1]);
+   size_t pos_nodo = *(size_t*) (vector_lnp[2]);
    lista_iter_t* iter = lista_iter_crear(lista);
+   //saco el valor
+   void* valor = nodo->valor;
    
-   //Verifico que existan
-   if (!lista || !iter) return NULL;
-   //Recorro la lista buscando la clave
-   while(lista_iter_ver_actual(iter))
-   {
-      nodo_actual = lista_iter_ver_actual(iter);
-      //Verifico si esta
-      if (!strcmp( nodo_actual->clave, clave)){
-          if (lista_largo(lista)==  0) lista_destruir(lista, NULL);
-          //Disminuyo la cantidad
-          hash->cantidad--;
-          void *dato = ((nodo_hash_t*) lista_iter_ver_actual(iter))->valor;
-          //Libero la clave
-          char *clave_borrar=  ((nodo_hash_t*) lista_iter_ver_actual(iter))->clave;
-          free(clave_borrar);
-          //Bye nodo_hash_t
-          free(((nodo_hash_t*) lista_borrar(lista, iter)));
-          //Destruyo el iterador
-          lista_iter_destruir(iter);
-          return dato;
-      }//if
+   //Avanzo la hasta llegar al nodo
+   for (int i=0; i< pos_nodo; i++)
+       lista_iter_avanzar(iter);
 
-      //No esta, entonces avanzo una pocicion
-      lista_iter_avanzar(iter);
+    free(nodo->clave);
+    //quito el nodo de la lista
+    free((nodo_hash_t*) lista_borrar(lista, iter));
+    //libero memoria
+    lista_iter_destruir(iter);
+    free(vector_lnp);
 
-   }
-   //Destruyo el iterador
-   lista_iter_destruir(iter);
+    hash->cantidad -=1;
 
-   //No la encontre, pucha!
-   return false;
+    return valor;
 }//hash_borrar
 
 void hash_destruir(hash_t *hash)
@@ -327,11 +235,6 @@ bool hash_iter_avanzar(hash_iter_t *iter)
         //busco la siguiente lista
         long int pos = _buscar_lista(iter->hash,(long int) (iter->pos_vect +1));
         if (pos == -1) return false; // no hay mas listas campeon
-        /*if (pos == -1){*/
-            /*if (!lista_iter_ver_actual(iter->iter_lista)) return false;*/
-            /*[>lista_iter_avanzar(iter->iter_lista);<]*/
-            /*return true;*/
-        /*}// no hay mas listas campeon*/
         // hay otra lista, entonces destruyo el iterador viejo y le doy paso 
         // a la juventud
         iter->pos_vect  = pos;
@@ -341,7 +244,6 @@ bool hash_iter_avanzar(hash_iter_t *iter)
     } //if
     
     //si estoy en medio de la lista
-    /*lista_iter_avanzar(iter->iter_lista);*/
     return true;
 }//hash_iter_avanzar
 
@@ -349,7 +251,6 @@ const char *hash_iter_ver_actual(const hash_iter_t *iter)
 {
     if (iter->hash->cantidad == 0) return NULL;
     else if (! lista_iter_ver_actual(iter->iter_lista)) return NULL;
-    /*else if  (! ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave )return NULL;*/
     return ((char*) ((nodo_hash_t*) lista_iter_ver_actual(iter->iter_lista))->clave );
 
 }//hash_iter_ver_actual
@@ -358,7 +259,6 @@ bool hash_iter_al_final(const hash_iter_t *iter)
 {
     if (hash_cantidad(iter->hash) <=0) return true;
     else if (lista_iter_al_final(iter->iter_lista)) return true;
-    /*else if (_buscar_lista(iter->hash, iter->pos_vect +1) == -1 ) return true;*/
     return false;
 
 }//hash_iter_al_final
@@ -403,8 +303,6 @@ float  _factor_de_carga(hash_t *hash){
 //Funcion _hash_redimensionar
 bool _hash_redimensionar(hash_t *hash)
 {
-    
-    puts("Redimensiono");
     long int nuevoTam = hash->tamanio*5;
     lista_t** vectorNuevo =  calloc(nuevoTam, sizeof(lista_t*));
     if (!vectorNuevo) return false;
@@ -412,7 +310,6 @@ bool _hash_redimensionar(hash_t *hash)
     //creo las sublistas
     for (unsigned int i = 0; i < nuevoTam; i++){
           vectorNuevo[i]=lista_crear();        
-          //podria verficarse que no sea null.
     } 
       
     //voy sacando los nodos del vector original, y reubicandolos en el nuevo:
@@ -439,45 +336,22 @@ bool _hash_reemplazar(hash_t* hash,char* clave, void* dato)
    //Obtengo la posicion del nodo 
    long int vect_pos = _fhash(clave, hash->tamanio);
    
-   nodo_hash_t* nodo_actual = NULL;
-   lista_t* lista = hash->tabla[vect_pos];
-   lista_iter_t* iter = lista_iter_crear(lista);
-   
-   //Verifico que existan
-   if (!lista || !iter) return NULL;
-   //Recorro la lista buscando la clave
-   while(!lista_iter_al_final(iter))
-   {
-      nodo_actual = lista_iter_ver_actual(iter);
-      //Verifico si esta
-      if (nodo_actual && !strcmp( nodo_actual->clave, clave)){
-          if(hash->destruir_dato) hash->destruir_dato(nodo_actual->valor);
-          nodo_actual->valor = dato;
-          lista_iter_destruir(iter);
-          return true; 
-      }//if
+   void** vector_lnp =  _obtenerListaOcupante(hash, clave, vect_pos);
+   nodo_hash_t* nodo = vector_lnp[1];
+   if (hash->destruir_dato)
+       hash->destruir_dato(nodo->valor);
 
-      //No esta, entonces avanzo una pocicion
-      lista_iter_avanzar(iter);
-
-   }//while
-   lista_iter_destruir(iter);
-
-   //No la encontre, pucha!
-   return false;
-    
-
+    nodo->valor = dato;
+    free(vector_lnp);
+    return true;
 }//_hash_reemplazar
 
-/*lista_t* _obtenerListaOcupante(const hash_t *hash,const  char* clave, int vect_pos)*/
 void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vect_pos)
 {
    //Devuelvo un vector donde en 0 tiene la direccion de la lista,
    // en 1 el nodo y en 2  la pocicion ( dentro de la liasta) 
    // donde esta el nodo
    
-   /*void* listaynodo = malloc( 3 * sizeof(void*));*/
-   void** listaynodo = malloc(sizeof(void*)*3);
    //Voy a dicha posicion y recorro los nodos
    if (!hash->tabla[vect_pos]) return NULL;
 
@@ -488,9 +362,10 @@ void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vec
    
    //Verifico que existan
    if (!lista || !iter) return NULL;
+   void** listaynodo = malloc(sizeof(void*)*3);
 
    size_t indice = 0;
-   size_t *pindice=NULL; //no se cual es el maximo de un size_t
+   size_t *pindice; //no se cual es el maximo de un size_t
    //pero no creo que la lista se llene tanto como para que explote
    //si pasa, revisar ACA.
 
@@ -518,6 +393,7 @@ void** _obtenerListaOcupante(const hash_t *hash,const  char* clave, long int vec
 
    }
    lista_iter_destruir(iter);
+   free(listaynodo);
 
    //No la encontre, pucha!
    return NULL;
